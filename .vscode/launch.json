@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:swift-unused-imports}",
+            "name": "Debug swift-unused-imports",
+            "program": "${workspaceFolder:swift-unused-imports}/.build/debug/swift-unused-imports",
+            "preLaunchTask": "swift: Build Debug swift-unused-imports"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:swift-unused-imports}",
+            "name": "Release swift-unused-imports",
+            "program": "${workspaceFolder:swift-unused-imports}/.build/release/swift-unused-imports",
+            "preLaunchTask": "swift: Build Release swift-unused-imports"
+        }
+    ]
+}
