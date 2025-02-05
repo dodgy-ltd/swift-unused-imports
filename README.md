@@ -11,4 +11,7 @@ There is also an tool called [Periphery](https://github.com/peripheryapp/periphe
 There is also a tool called [funimp](https://github.com/edmundmok/funimp/blob/master/README.md) which is pretty much exactly the same as this tool, but written as a bash script.
 
 ## The Future
-* Support non-macOS platforms.
+* Test on non-macOS platforms.
+
+## License
+This project is licensed under the terms of the MIT-0 license, see LICENSE.md.
