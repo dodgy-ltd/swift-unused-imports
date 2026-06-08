@@ -35,7 +35,7 @@ import Foundation
         if !buildSuccessful(customCommand: buildCmd, workingDirectory: root, verbose: verbose) {
             throw ValidationError("Build failed without changes")
         }
-        let swiftFiles = swiftFilesIn(directory: root, exclude: exclude)
+        let swiftFiles = swiftFilesIn(directory: root, exclude: exclude, verbose: verbose)
         var totalJobs = 0
         for swiftFile in swiftFiles {
             let imports = findImports(in: swiftFile)
