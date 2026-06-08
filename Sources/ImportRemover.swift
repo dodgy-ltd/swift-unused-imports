@@ -1,4 +1,4 @@
-// Copyright 2025 Dodgy Ltd.
+// Copyright 2025-2026 Dodgy Ltd.
 // Licensed under the MIT-0 license, see LICENSE.md
 
 import Foundation
@@ -13,12 +13,10 @@ func findImports(in file: URL) -> [ImportStatement] {
         return []
     }
     let importStatementRegex = #/^[ \t]*(import) \w+/#.anchorsMatchLineEndings()
-    let importStatements = contents.matches(of: importStatementRegex).map {
+    return contents.matches(of: importStatementRegex).map {
         ImportStatement(name: String(contents[$0.range]), range: $0.range)
     }
-    return importStatements
 }
-
 
 /// Remove a single import statement from a file.
 /// - Parameters:

@@ -1,4 +1,4 @@
-// Copyright 2025 Dodgy Ltd.
+// Copyright 2025-2026 Dodgy Ltd.
 // Licensed under the MIT-0 license, see LICENSE.md
 
 import ArgumentParser
@@ -7,13 +7,20 @@ import Foundation
 /// Command-line interface for import tuner tool.
 @main struct SwiftUnusedImports: AsyncParsableCommand {
     static let configuration = CommandConfiguration(
-        abstract: String(localized: "Finds unneeded Swift import dependencies via a brute force approach."))
+        abstract: String(localized: "Finds unneeded Swift import dependencies via a brute force approach.")
+    )
     
     @Argument(help: "Directory to scan for Swift files and building")
     var path: String = ""
     
     @Option(help: "Build command. Defaults to 'swift build'")
     var buildCmd: String?
+
+    @Option(parsing: .singleValue, help: "Directories to exclude from processing, relative to scan directory")
+    var exclude: [String] = []
+
+    @Flag(help: "Verbose output; show output of build command")
+    var verbose: Bool = false
     
     func validate() throws {
         let pathValid = try URL(fileURLWithPath: path).checkResourceIsReachable()
@@ -25,11 +32,10 @@ import Foundation
     func run() async throws {
         let root = URL(fileURLWithPath: path)
         print("Testing build without changes...")
-        if !buildSuccessful(customCommand: buildCmd, workingDirectory: root) {
-            
+        if !buildSuccessful(customCommand: buildCmd, workingDirectory: root, verbose: verbose) {
             throw ValidationError("Build failed without changes")
         }
-        let swiftFiles = swiftFilesIn(directory: root)
+        let swiftFiles = swiftFilesIn(directory: root, exclude: exclude)
         var totalJobs = 0
         for swiftFile in swiftFiles {
             let imports = findImports(in: swiftFile)
@@ -46,7 +52,7 @@ import Foundation
                 let importStatement = imports[importIndex]
                 removeImport(importStatement, from: swiftFile)
                 print("\(jobNumber)/\(totalJobs): \(swiftFile) can \(importStatement.name) be removed?", terminator: "")
-                if buildSuccessful(customCommand: buildCmd, workingDirectory: root) {
+                if buildSuccessful(customCommand: buildCmd, workingDirectory: root, verbose: verbose) {
                     print(" yes!")
                     imports = findImports(in: swiftFile)
                 } else {
