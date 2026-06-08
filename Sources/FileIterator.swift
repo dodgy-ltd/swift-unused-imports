@@ -4,7 +4,7 @@
 import Foundation
 
 /// Walk over all the swift files in a directory tree.
-func swiftFilesIn(directory: URL, exclude: [String]) -> [URL] {
+func swiftFilesIn(directory: URL, exclude: [String], verbose: Bool) -> [URL] {
     let fm = FileManager()
     let resourceKeys = Set<URLResourceKey>([.nameKey, .isDirectoryKey])
     guard let files = fm.enumerator(at: directory,
@@ -24,11 +24,12 @@ func swiftFilesIn(directory: URL, exclude: [String]) -> [URL] {
             continue
         }
         if fileURL.hasPrefix(in: excludedPrefixes) {
-            print("Excluding \(fileURL)")
+            if verbose {
+                print("Excluding \(fileURL)")
+            }
             continue
         }
         swiftFiles.append(fileURL)
-        print("Will check \(fileURL)")
     }
     return swiftFiles
 }
